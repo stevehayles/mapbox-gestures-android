@@ -43,7 +43,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
   @Nullable
   private RectF moveThresholdRect;
-  private float moveThreshold;
+  private float moveThreshold = 40;
 
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
