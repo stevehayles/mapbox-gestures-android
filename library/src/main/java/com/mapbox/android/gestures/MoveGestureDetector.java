@@ -43,7 +43,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
   @Nullable
   private RectF moveThresholdRect;
-  private float moveThreshold = 40;
+  private float moveThreshold;
 
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
@@ -177,9 +177,13 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   }
 
   boolean checkAnyMoveAboveThreshold() {
+    float localMoveThreshold = moveThreshold;
+    if (getPointersCount() > 1) { // if it's a multitouch gesture then icnrease the threshold
+      localMoveThreshold += 50;
+    }
     for (MoveDistancesObject moveDistancesObject : moveDistancesObjectMap.values()) {
-      boolean thresholdExceeded = Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= moveThreshold
-        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= moveThreshold;
+      boolean thresholdExceeded = Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= localMoveThreshold
+        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= localMoveThreshold;
 
       boolean isInRect = moveThresholdRect != null && moveThresholdRect.contains(getFocalPoint().x, getFocalPoint().y);
       return !isInRect && thresholdExceeded;
